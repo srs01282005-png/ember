@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burning Blossoms Animation</title>
+
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #171514;
+    font-family: sans-serif;
+  }
+
+  /* Petal image and animation container */
+  .petal {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cherry_blossom_petal_simple.svg/1024px-Cherry_blossom_petal_simple.svg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    opacity: 1;
+    animation: fall linear forwards;
+  }
+
+  /* Falling movement */
+  @keyframes fall {
+    0% {
+      transform: translateY(-50px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(150deg);
+      opacity: 0.9;
+    }
+  }
+
+  /* Burning effect */
+  @keyframes burn {
+    0% { filter: none; opacity: 1; }
+    40% { filter: brightness(0.6) sepia(1) hue-rotate(-20deg); }
+    70% { opacity: 0.5; transform: scale(0.7); filter: blur(1px); }
+    100% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(3px); }
+  }
+</style>
+</head>
+<body>
+
+<script>
+  function spawnPetal() {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+
+    // Random horizontal start
+    petal.style.left = Math.random() * window.innerWidth + "px";
+
+    // Random fall duration
+    const fallDuration = 6 + Math.random() * 5;
+    petal.style.animationDuration = fallDuration + "s";
+
+    document.body.appendChild(petal);
+
+    // Start burning mid-fall
+    setTimeout(() => {
+      petal.style.animation = `burn ${fallDuration * 0.6}s forwards`;
+    }, fallDuration * 0.4 * 1000);
+
+    // Clean up after animation completes
+    setTimeout(() => {
+      petal.remove();
+    }, fallDuration * 1000);
+  }
+
+  // Spawn petals regularly
+  setInterval(spawnPetal, 300);
+</script>
+
+</body>
+</html>
